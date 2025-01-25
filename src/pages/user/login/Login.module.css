@@ -1,0 +1,102 @@
+.loginForm{
+    position: relative;
+}
+.backHome{
+    position: absolute;
+    top: 20px;
+    left: 40px;    
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
+.backHome a{
+    text-decoration: none;
+    font-weight: bold;
+    color: #000;
+    font-size: 30px;
+}
+.backHome img{
+    width: 40px;
+    height: 40px;
+}
+.loginImage{
+    width: 100%;
+    height: 100vh;
+    object-fit: cover;
+}
+
+.imageDiv{
+    position: relative;
+}
+
+.contentImage{
+    position: absolute;
+    top: 40%;
+    left: 15%;
+    color: #fff;
+    text-align: center;
+}
+.contentImage h1{
+    font-weight: bold;
+    font-size: 50px;
+}
+.contentImage p{
+    font-size: 23px;
+}
+.contentImage button{
+    width: 160px;
+    height: 40px;
+}
+.formDiv{
+    background-color: #161616;
+}
+.form{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.FormForm{
+    width: 55%;
+}
+.inputForm{
+    margin-bottom: 16px;
+}
+.form input[type='email'],
+.form input[type='password'],
+.form input[type='text']
+ {
+  background-color: #000;  
+  color: #fff;
+  width: 100%;
+  padding: 16px;
+  border: 1px solid black;
+  outline:none;
+  box-sizing: border-box;
+}
+.form input[type='email']:focus,
+.form input[type='password']:focus,
+.form input[type='text']:focus
+ {
+    border: 1px solid #fff;
+}
+
+.forgetPassword,
+.haveAccount a{
+    color: rgb(111, 111, 111);
+    transition: all 0.4s ease;
+    text-decoration: none;
+}
+.forgetPassword:hover,
+.haveAccount a:hover{
+    text-decoration: underline;
+    color: rgb(212, 212, 212);
+}
+
+.haveAccount{
+    color: rgb(255, 255, 255);
+    transition: all 0.4s ease;
+    text-decoration: none;
+}
