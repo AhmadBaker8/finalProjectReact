@@ -1,0 +1,35 @@
+
+.button{
+    border: none;
+    position: relative;
+    text-align: center;
+    overflow: hidden;
+    z-index: 1;
+    opacity: 1;
+    background-color: #222f3f;
+    transition: 0.5s;
+    font-weight: 500;
+    padding: 15px 35px;
+    color: #fff;
+
+}
+.button .span{
+    position: absolute;
+    width: 0;
+    height: 0;
+    background-color: #fff;
+    transition: width 0.7s ease-in-out,height 0.7s ease-in-out;
+    transform: translate(-50%,-50%);
+    z-index: -1;
+    border-radius: 5px;
+    display: inline-block;
+    opacity: 1;
+    color: #fff;
+}
+.button:hover{
+    color: #292929 !important;
+}
+.button:hover .span{
+    width: 225%;
+    height: 562.5px;
+}

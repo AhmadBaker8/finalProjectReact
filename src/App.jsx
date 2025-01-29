@@ -13,6 +13,10 @@ import UserLayout from './layouts/UserLayout'
 import Home from './pages/user/home/Home'
 import Categories from './pages/user/categories/Categories'
 import Products from './pages/user/products/Products'
+import Checkout from './pages/user/checkout/Checkout'
+import Shop from './pages/user/shop/Shop'
+import Contact from './pages/user/contact/Contact'
+
 
 function App() {
   
@@ -46,6 +50,18 @@ function App() {
         {
           path:"/products",
           element:<Products/>
+        },
+        {
+          path:"/checkout",
+          element:<Checkout/>
+        },
+        {
+          path:"/shop",
+          element:<Shop/>
+        },
+        {
+          path:"/contact",
+          element:<Contact/>
         }
       ]
     },

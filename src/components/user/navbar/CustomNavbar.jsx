@@ -1,22 +1,59 @@
 import React from 'react'
-import { Container, Nav, Navbar } from 'react-bootstrap'
+import { Container, Nav, Navbar, NavDropdown } from 'react-bootstrap'
 import { Link } from 'react-router-dom'
+import styles from './CustomNavbar.module.css'
+import logo from '../../../assets/images/logoLogin.svg'
+import { FaCartShopping } from "react-icons/fa6";
+import { FiAlignJustify } from "react-icons/fi";
 
 export default function CustomNavbar() {
   return (
-   <Navbar expand="lg" className="bg-body-tertiary">
+  <>
+  <Navbar expand="lg" className={`bg-body-tertiary ${styles.firstNavbar}`}>
     <Container>
-      <Navbar.Brand href="#home">Baker Shop</Navbar.Brand>
+      <Navbar.Brand href="#home">
+        <img src={logo} alt="" />
+      </Navbar.Brand>
       <Navbar.Toggle aria-controls="basic-navbar-nav" />
       <Navbar.Collapse id="basic-navbar-nav">
-        <Nav className="ms-auto">
+        <Nav className="ms-auto d-flex gap-2">
+          <Nav.Link as={Link} to={""} className='d-block'>
+            <FaCartShopping />
+          </Nav.Link>
+          <Nav.Link as={Link} to={"/auth/login"}>$
+          <span>59</span>
+          </Nav.Link>
           <Nav.Link as={Link} to={"/auth/login"}>Login</Nav.Link>
           <Nav.Link as={Link} to={"/auth/register"}>Register</Nav.Link>
-          <Nav.Link as={Link} to={"/products"}>Products</Nav.Link>
-          <Nav.Link as={Link} to={"/categories"}>Categories</Nav.Link>
         </Nav>
       </Navbar.Collapse>
     </Container>
   </Navbar>
+
+  <Navbar expand="lg" className={`bg-body-tertiary ${styles.secondNavbar}`}>
+    <Container>
+      <Nav.Link as={Link} to={"/auth/login"} className='d-flex align-items-center justify-content-center gap-2 fw-medium'>
+      <span><FiAlignJustify /></span>
+      <span>All Categories</span>
+      </Nav.Link>
+      <Navbar.Toggle aria-controls="basic-navbar-nav" />
+      <Navbar.Collapse id="basic-navbar-nav">
+        <Nav className="m-auto gap-4 fw-medium">
+          <Nav.Link as={Link} to={"/"}>Home</Nav.Link>
+          <Nav.Link as={Link} to={"/shop"}>Shop</Nav.Link>
+          <Nav.Link as={Link} to={""}>Cart</Nav.Link>
+          <Nav.Link as={Link} to={""}>Wishlist</Nav.Link>
+          <Nav.Link as={Link} to={"/checkout"}>Checkout</Nav.Link>
+          <Nav.Link as={Link} to={"/contact"}>Contact</Nav.Link>
+        </Nav>
+      </Navbar.Collapse>
+    </Container>
+  </Navbar>
+   
+   
+   
+   
+   
+   </>
   )
 }
