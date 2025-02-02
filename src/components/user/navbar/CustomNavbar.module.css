@@ -27,3 +27,6 @@
 .secondNavbar a:hover{
     color: #fff;
 }
+.nav-link{
+    color: aqua !important;
+}

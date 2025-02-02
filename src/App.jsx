@@ -11,11 +11,11 @@ import DashboardLayout from './layouts/DashboardLayout'
 import { ToastContainer } from 'react-toastify'
 import UserLayout from './layouts/UserLayout'
 import Home from './pages/user/home/Home'
-import Categories from './pages/user/categories/Categories'
-import Products from './pages/user/products/Products'
 import Checkout from './pages/user/checkout/Checkout'
 import Shop from './pages/user/shop/Shop'
 import Contact from './pages/user/contact/Contact'
+import Categories from './hooks/Categories'
+import Products from './hooks/Products'
 
 
 function App() {

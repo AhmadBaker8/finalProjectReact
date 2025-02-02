@@ -33,8 +33,6 @@ export default function CustomNavbar() {
   <Navbar expand="lg" className={`bg-body-tertiary ${styles.secondNavbar}`}>
     <Container>
       <Nav.Link as={Link} to={"/auth/login"} className='d-flex align-items-center justify-content-center gap-2 fw-medium'>
-      <span><FiAlignJustify /></span>
-      <span>All Categories</span>
       </Nav.Link>
       <Navbar.Toggle aria-controls="basic-navbar-nav" />
       <Navbar.Collapse id="basic-navbar-nav">
