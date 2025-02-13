@@ -39,8 +39,8 @@ export default function CustomNavbar() {
         <Nav className="m-auto gap-4 fw-medium">
           <Nav.Link as={Link} to={"/"}>Home</Nav.Link>
           <Nav.Link as={Link} to={"/shop"}>Shop</Nav.Link>
-          <Nav.Link as={Link} to={""}>Cart</Nav.Link>
-          <Nav.Link as={Link} to={""}>Wishlist</Nav.Link>
+          <Nav.Link as={Link} to={"/cart"}>Cart</Nav.Link>
+          <Nav.Link as={Link} to={"/wishlist"}>Wishlist</Nav.Link>
           <Nav.Link as={Link} to={"/checkout"}>Checkout</Nav.Link>
           <Nav.Link as={Link} to={"/contact"}>Contact</Nav.Link>
         </Nav>

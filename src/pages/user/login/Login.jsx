@@ -31,6 +31,7 @@ export default function Login() {
         value
       );
       if (response.status == 200) {
+        localStorage.setItem("userToken",response.data.token);
         toast.success("You have logged in...", {
           position: "top-right",
           autoClose: 5000,

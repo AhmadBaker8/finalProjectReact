@@ -2,6 +2,7 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react'
 import { FaStar } from "react-icons/fa";
 import { Link } from 'react-router-dom';
+import Loader from './Loader';
 
 
 export default function SpecialOffer() {
@@ -28,7 +29,7 @@ export default function SpecialOffer() {
 
 
     if(isLoading){
-        return <h2>loading...</h2>
+        return <Loader/>
     }
 
   return (

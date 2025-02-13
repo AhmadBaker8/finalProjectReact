@@ -16,6 +16,9 @@ import Shop from './pages/user/shop/Shop'
 import Contact from './pages/user/contact/Contact'
 import Categories from './hooks/Categories'
 import Products from './hooks/Products'
+import Cart from './pages/user/cart/Cart'
+import ProductsDetails from './pages/user/productDetails/ProductsDetails'
+import Wishlist from './pages/user/wishlist/Wishlist'
 
 
 function App() {
@@ -62,6 +65,18 @@ function App() {
         {
           path:"/contact",
           element:<Contact/>
+        },
+        {
+          path:"/cart",
+          element:<Cart/>
+        },
+        {
+          path:"/products-details/:id",
+          element:<ProductsDetails/>
+        },
+        {
+          path:"/wishlist",
+          element:<Wishlist/>
         }
       ]
     },

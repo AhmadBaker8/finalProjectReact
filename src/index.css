@@ -12,6 +12,7 @@ a {
   -webkit-transition: 0.5s;
   transition: 0.5s;
   color: #292929;
+  cursor: pointer;
 }
 a:hover,
 a:focus {
@@ -5204,6 +5205,9 @@ h6:last-child {
 .cart-table table thead {
   background-color: #fff;
 }
+.cart-table table tbody{
+  background-color: #F5F5F5;
+}
 .cart-table table thead tr th {
   border-bottom-width: 0;
   vertical-align: middle;
@@ -5470,6 +5474,7 @@ h6:last-child {
   border-top: none;
   border-left: none;
   border-right: none;
+  background-color: #F5F5F5;
 }
 .wishlist-table table tbody tr td.product-thumbnail a {
   display: block;

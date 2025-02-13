@@ -5,14 +5,17 @@ import { FaCartShopping } from "react-icons/fa6";
 import { FaRegHeart } from "react-icons/fa";
 import { FaRegEye } from "react-icons/fa";
 import { FaStar } from "react-icons/fa";
+import Loader from "../custom/Loader";
+import { Slide, toast } from "react-toastify";
 
 export default function ShopArea() {
-  const [filterBy, setFilterBy] = useState("66fb864941aba231158e3b4d");
+  const [filterBy, setFilterBy] = useState("");
   const [categories, setCategories] = useState([]);
   const [products, setProducts] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
 
   const getCategories = async () => {
+    setIsLoading(true);
     try {
       const { data } = await axios.get(
         `https://ecommerce-node4.onrender.com/categories`
@@ -24,6 +27,7 @@ export default function ShopArea() {
     }
   };
   const getProductsByCategories = async (id) => {
+    setIsLoading(true);
     setFilterBy(id);
     try {
       const { data } = await axios.get(
@@ -35,6 +39,67 @@ export default function ShopArea() {
       setIsLoading(false);
     }
   };
+  const addToCart = async (id) => {
+    try {
+      const token = localStorage.getItem("userToken");
+      const response = await axios.post(
+        "https://ecommerce-node4.onrender.com/cart",
+        {
+          productId: id,
+        },
+        {
+          headers: {
+            Authorization: `Tariq__${token}`,
+          },
+        }
+      );
+      if (response.status == 201) {
+        toast.success("Product added successfully...", {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: false,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "dark",
+          transition: Slide,
+        });
+      }
+    } catch (error) {
+      toast.info("Product already in the cart !", {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "dark",
+        transition: Slide,
+      });
+    }
+  };
+  const addToWishlist = (product) => {
+    let wishlist = JSON.parse(localStorage.getItem("wishlistProducts")) || [];
+
+    if (wishlist.some((item) => item._id === product._id)) {
+      toast.info("Product already in the wishlist!", {
+        position: "top-right",
+        autoClose: 3000,
+        theme: "dark",
+      });
+      return;
+    }
+
+    wishlist.push(product);
+    localStorage.setItem("wishlistProducts", JSON.stringify(wishlist));
+    toast.success("Product added to wishlist!", {
+      position: "top-right",
+      autoClose: 3000,
+      theme: "dark",
+    });
+  };
 
   useEffect(() => {
     getCategories();
@@ -42,7 +107,7 @@ export default function ShopArea() {
   }, []);
 
   if (isLoading) {
-    return <h2>loading...</h2>;
+    return <Loader />;
   }
 
   return (
@@ -57,10 +122,10 @@ export default function ShopArea() {
                   <ul className="categories">
                     {categories.map((category) => (
                       <li
-                      onClick={() => getProductsByCategories(category._id)}
-                      className={`tab-item${
-                        filterBy === `${category._id}` ? " tab-active" : ""
-                      }`}
+                        onClick={() => getProductsByCategories(category._id)}
+                        className={`tab-item${
+                          filterBy === `${category._id}` ? " tab-active" : ""
+                        }`}
                       >
                         <a>{category.name}</a>
                       </li>
@@ -77,18 +142,24 @@ export default function ShopArea() {
                     <div className="col-lg-4 col-sm-6" key={product._id}>
                       <div className="single-shop-products">
                         <div className="shop-products-image">
-                          <Link to={`/`}>
+                          <Link to={`/products-details/${product._id}`}>
                             <img src={product.mainImage.secure_url} alt="" />
                           </Link>
                           <div className="tag">New</div>
                           <ul className="shop-action">
                             <li>
-                              <span className="addtocart-icon-wrap">
+                              <span
+                                className="addtocart-icon-wrap"
+                                onClick={() => addToCart(product._id)}
+                              >
                                 <FaCartShopping />
                               </span>
                             </li>
                             <li>
-                              <span className="addtocart-icon-wrap">
+                              <span
+                                className="addtocart-icon-wrap"
+                                onClick={() => addToWishlist(product)}
+                              >
                                 <FaRegHeart />
                               </span>
                             </li>
@@ -106,7 +177,9 @@ export default function ShopArea() {
 
                         <div className="shop-products-content">
                           <h3>
-                            <Link to={`/`}>{product.name}</Link>
+                            <Link to={`/products-details/${product._id}`}>
+                              {product.name}
+                            </Link>
                           </h3>
                           <ul className="rating">
                             <li>

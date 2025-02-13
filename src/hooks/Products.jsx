@@ -5,6 +5,7 @@ import { FaCartShopping } from "react-icons/fa6";
 import { FaRegHeart } from "react-icons/fa";
 import { FaRegEye } from "react-icons/fa";
 import { FaStar } from "react-icons/fa";
+import Loader from '../components/user/custom/Loader';
 
 export default function Products({scale}) {
 
@@ -23,7 +24,7 @@ export default function Products({scale}) {
         }finally{
             setIsLoading(false);
         }
-        
+
     }
 
     useEffect(()=>{
@@ -32,7 +33,7 @@ export default function Products({scale}) {
 
 
     if(isLoading){
-        return <h2>loading...</h2>
+        return <Loader/>
     }
 
 

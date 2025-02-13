@@ -5,6 +5,7 @@ import { FaCartShopping } from "react-icons/fa6";
 import { FaRegHeart } from "react-icons/fa";
 import { FaRegEye } from "react-icons/fa";
 import { FaStar } from "react-icons/fa";
+import Loader from "./Loader";
 
 export default function BestSellers() {
   const [filterBy, setFilterBy] = useState("66fb864941aba231158e3b4d");
@@ -23,7 +24,7 @@ export default function BestSellers() {
       setIsLoading(false);
     }
   };
-  const getProductsByCategories = async (id, categoryName) => {
+  const getProductsByCategories = async (id) => {
     setFilterBy(id);
     try {
       const { data } = await axios.get(
@@ -42,7 +43,7 @@ export default function BestSellers() {
   }, []);
 
   if (isLoading) {
-    return <h2>loading...</h2>;
+    return <Loader/>
   }
   return (
     <>

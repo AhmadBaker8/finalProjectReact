@@ -5,6 +5,7 @@ import { FaRegHeart } from "react-icons/fa";
 import { FaRegEye } from "react-icons/fa";
 import { FaStar } from "react-icons/fa";
 import { Link } from 'react-router-dom';
+import Loader from '../components/user/custom/Loader';
 
 export default function SpecProductsByCategory({scale,id}) {
 
@@ -33,7 +34,7 @@ export default function SpecProductsByCategory({scale,id}) {
 
 
     if(isLoading){
-        return <h2>loading...</h2>
+        return <Loader/>
     }
 
   return (

@@ -1,6 +1,7 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react'
 import SpecProductsByCategory from './SpecProductsByCategory';
+import Loader from '../components/user/custom/Loader';
 
 export default function Categories({type}) {
 
@@ -28,7 +29,7 @@ export default function Categories({type}) {
     },[])
 
     if(isLoading){
-        return <h2>Loading...</h2>
+        return <Loader/>
     }
 
   return (
