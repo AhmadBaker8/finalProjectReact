@@ -1,19 +1,20 @@
 import axios from "axios";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import Loader from "../custom/Loader";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
+import { CartContext } from "../context/CartContext";
 
 export default function CartArea() {
   const [cart, setCart] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-
+  const {cartCount,setCartCount} = useContext(CartContext);
   const getCart = async () => {
     setIsLoading(true);
     try {
       const token = localStorage.getItem("userToken");
       const response = await axios.get(
-        "https://ecommerce-node4.onrender.com/cart",
+        `${import.meta.env.VITE_BURL}/cart`,
         {
           headers: {
             Authorization: `Tariq__${token}`,
@@ -31,7 +32,7 @@ export default function CartArea() {
     try {
       const token = localStorage.getItem("userToken");
       const response = await axios.patch(
-        `https://ecommerce-node4.onrender.com/cart/removeItem`,
+        `${import.meta.env.VITE_BURL}/cart/removeItem`,
         {
           productId: id,
         },
@@ -45,7 +46,7 @@ export default function CartArea() {
       setCart((prevCart) => {
         return prevCart.filter((item) => item.productId !== id);
       });
-
+      setCartCount(cartCount-1);
       toast.info("Product has been removed!", {
         position: "top-right",
         autoClose: 3000,
@@ -58,7 +59,7 @@ export default function CartArea() {
   const clearAllCart = async () => {
     const token = localStorage.getItem("userToken");
     const response = await axios.patch(
-      `https://ecommerce-node4.onrender.com/cart/clear`,
+      `${import.meta.env.VITE_BURL}/cart/clear`,
       null,
       {
         headers: {
@@ -67,7 +68,54 @@ export default function CartArea() {
       }
     );
     setCart([]);
+    setCartCount(0);
   };
+  const decreaseQty = async (productId) =>{
+    const token = localStorage.getItem("userToken");
+    const response = await axios.patch(`https://ecommerce-node4.onrender.com/cart/decraseQuantity`,
+      {
+        productId:productId
+      },
+      {
+        headers:{
+          Authorization:`Tariq__${token}`
+        }
+      }
+    )
+    setCart( prevCart =>{
+      return prevCart.map(item=>{
+        if(item.productId == productId){
+          return {...item,quantity:item.quantity-1};
+        }
+        return item;
+      })
+    })
+  };
+  const increaseQty = async (productId) =>{
+    const token = localStorage.getItem("userToken");
+    const response = await axios.patch(`https://ecommerce-node4.onrender.com/cart/incraseQuantity`,
+      {
+        productId:productId
+      },
+      {
+        headers:{
+          Authorization:`Tariq__${token}`
+        }
+      }
+    )
+    setCart( prevCart =>{
+      return prevCart.map(item=>{
+        if(item.productId == productId){
+          return {...item,quantity:item.quantity+1};
+        }
+        return item;
+      })
+    })
+  };
+  const subTotal = cart.reduce(
+    (acc,item)=> acc+item.quantity * parseInt(item.details.finalPrice),0);
+  const shipping = 30.0;
+  const total = shipping + subTotal;
 
   useState(() => {
     getCart();
@@ -136,7 +184,7 @@ export default function CartArea() {
 
                           <td className="product-quantity">
                             <div className="input-counter">
-                              <span className="minus-btn">
+                              <span className="minus-btn" onClick={()=> decreaseQty(cartItem.productId)}>
                                 <i className="bx bx-minus"></i>
                               </span>
                               <input
@@ -145,7 +193,7 @@ export default function CartArea() {
                                 min="1"
                                 max={cartItem.details.stock}
                               />
-                              <span className="plus-btn">
+                              <span className="plus-btn" onClick={()=> increaseQty(cartItem.productId)}>
                                 <i className="bx bx-plus"></i>
                               </span>
                             </div>
@@ -196,31 +244,22 @@ export default function CartArea() {
 
               <ul>
                 <li>
-                  Subtotal <span>$</span>
+                  Subtotal <span>${subTotal.toFixed(2)}</span>
                 </li>
                 <li>
-                  Shipping <span>$30.00</span>
+                  Shipping <span>${shipping.toFixed(2)}</span>
                 </li>
                 <li>
-                  Total <span>$</span>
+                  Total <span>${total.toFixed(2)}</span>
                 </li>
                 <li>
-                  Payable Total <span>$</span>
+                  Payable Total <span>${total.toFixed(2)}</span>
                 </li>
               </ul>
 
               <button className="proceed_button">
-                {cart.length === 0 ? (
-                  <Link
-                    to=""
-                    className="disable-btn"
-                    onClick={(event) => event.preventDefault()}
-                  >
-                    Proceed to Checkout
-                    <span></span>
-                  </Link>
-                ) : (
-                  <Link to="/checkout" className="default-btn">
+                {(
+                  <Link to="/checkout" className="default-btn" state={{total:total,shipping:shipping,subTotal:subTotal}}>
                     Proceed to Checkout
                     <span></span>
                   </Link>

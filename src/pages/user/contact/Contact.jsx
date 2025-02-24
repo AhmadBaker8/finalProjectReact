@@ -10,7 +10,6 @@ export default function Contact() {
     <PageTitle title={"Contact"}/>
     <ContactArea/>
     <Footer/>
-      
     </>
   )
 }

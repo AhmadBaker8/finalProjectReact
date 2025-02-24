@@ -19,6 +19,9 @@ import Products from './hooks/Products'
 import Cart from './pages/user/cart/Cart'
 import ProductsDetails from './pages/user/productDetails/ProductsDetails'
 import Wishlist from './pages/user/wishlist/Wishlist'
+import CartContextProvider from './components/user/context/CartContext'
+import Profile from './pages/profile/Profile'
+import UserContextProvider from './components/user/context/UserContext'
 
 
 function App() {
@@ -77,6 +80,10 @@ function App() {
         {
           path:"/wishlist",
           element:<Wishlist/>
+        },
+        {
+          path:"/profile",
+          element:<Profile/>
         }
       ]
     },
@@ -88,8 +95,13 @@ function App() {
 
   return (
     <>
+
+      <UserContextProvider>
+      <CartContextProvider>
       <ToastContainer />
       <RouterProvider router={router}/>
+      </CartContextProvider>
+      </UserContextProvider>
       
     </>
   )

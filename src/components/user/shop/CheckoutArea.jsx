@@ -1,11 +1,74 @@
-import React from "react";
+import axios from "axios";
+import React, { useContext, useState } from "react";
+import { useForm } from "react-hook-form";
+import { useLocation } from "react-router-dom";
+import { Bounce, toast } from "react-toastify";
+import Loader from "../custom/Loader";
+import { CartContext } from "../context/CartContext";
 
 export default function CheckoutArea() {
+
+  const {register,handleSubmit,setError:{errors}} = useForm();
+  const {setCartCount} = useContext(CartContext);
+  const location = useLocation();
+  const { total, shipping, subTotal } = location.state || { total: 0, shipping: 0, subTotal: 0 };
+  const [order,setOrder] = useState();
+  const [isLoading,setIsLoading] = useState(false);
+
+  const createOrder = async (value)=>{
+    setIsLoading(true);
+    try{
+      const token = localStorage.getItem('userToken');
+      const response = await axios.post(`${import.meta.env.VITE_BURL}/order`,
+      value,
+      {
+        headers:{
+          Authorization:`Tariq__${token}`
+        }
+      }
+    );
+    if(response.status == 200){
+      toast.success(`The order has been created`,{
+        position:"top-right",
+        autoClose:4000,
+        hideProgressBar:false,
+        closeOnClick:true,
+        pauseOnHover:true,
+        draggable:true,
+        theme:"dark",
+        transition:Bounce,
+      });
+    }
+    console.log(response.data.order);
+    setOrder(response.data.order);
+    setCartCount(0);
+
+    }catch(error){
+      toast.error(`${error}`,{
+        position:"top-right",
+        autoClose:4000,
+        hideProgressBar:false,
+        closeOnClick:true,
+        pauseOnHover:true,
+        draggable:true,
+        theme:"dark",
+        transition:Bounce,
+      });
+    }
+    finally{
+      setIsLoading(false);
+    }
+    
+  }
+  if(isLoading){
+    return <Loader/>
+  }
+
   return (
     <>
       <section className="checkout-area ptb-50">
         <div className="container">
-          <form>
+          <form onSubmit={handleSubmit(createOrder)}>
             <div className="row">
               <div className="col-lg-8 col-md-12">
                 <div className="billing-details">
@@ -22,7 +85,6 @@ export default function CheckoutArea() {
                         />
                       </div>
                     </div>
-
                     <div className="col-lg-6 col-md-6">
                       <div className="form-group">
                         <input
@@ -33,7 +95,6 @@ export default function CheckoutArea() {
                         />
                       </div>
                     </div>
-
                     <div className="col-lg-6 col-md-6">
                       <div className="form-group">
                         <input
@@ -41,10 +102,10 @@ export default function CheckoutArea() {
                           id="address"
                           className="form-control"
                           placeholder="Address*"
+                          {...register('address',{required:"address is required"})}
                         />
                       </div>
                     </div>
-
                     <div className="col-lg-4 col-md-4">
                       <div className="form-group">
                         <input
@@ -55,7 +116,6 @@ export default function CheckoutArea() {
                         />
                       </div>
                     </div>
-
                     <div className="col-lg-2 col-md-2">
                       <div className="form-group">
                         <input
@@ -66,7 +126,6 @@ export default function CheckoutArea() {
                         />
                       </div>
                     </div>
-
                     <div className="col-lg-3 col-md-3">
                       <div className="form-group">
                         <input
@@ -77,7 +136,6 @@ export default function CheckoutArea() {
                         />
                       </div>
                     </div>
-
                     <div className="col-lg-3 col-md-3">
                       <div className="form-group">
                         <input
@@ -85,10 +143,10 @@ export default function CheckoutArea() {
                           id="phone"
                           className="form-control"
                           placeholder="Phone*"
+                          {...register('phone',{required:"phone is required !"})}
                         />
                       </div>
                     </div>
-
                     <div className="col-lg-6 col-md-6">
                       <div className="form-group">
                         <input
@@ -102,12 +160,11 @@ export default function CheckoutArea() {
                     <div className="col-lg-12 col-md-12">
                       <div className="form-group">
                         <textarea
-                          name="notes"
-                          id="notes"
-                          cols="30"
-                          rows="3"
-                          placeholder="Order Notes"
+                          name="coupon"
+                          id="coupon"
+                          placeholder="coupon name"
                           className="form-control"
+                          {...register('couponName')}
                         ></textarea>
                       </div>
                     </div>
@@ -158,19 +215,19 @@ export default function CheckoutArea() {
                     <h3>Cart Totals</h3>
 
                     <ul>
-                      <li>
-                        <span></span>
-                      </li>
-                      <li>
-                        Shipping <span>$30.00</span>
-                      </li>
-                      <li>
-                        <span></span>
-                      </li>
-                      <li>
-                        <span></span>
-                      </li>
-                    </ul>
+                <li>
+                  Subtotal <span>${subTotal.toFixed(2)}</span>
+                </li>
+                <li>
+                  Shipping <span>${shipping.toFixed(2)}</span>
+                </li>
+                <li>
+                  Total <span>${total.toFixed(2)}</span>
+                </li>
+                <li>
+                  Payable Total <span>${total.toFixed(2)}</span>
+                </li>
+              </ul>
                   </div>
 
                   <div className="payment-box">
@@ -212,6 +269,10 @@ export default function CheckoutArea() {
               </div>
             </div>
           </form>
+          <div>
+            {
+            }
+          </div>
         </div>
       </section>
     </>

@@ -4,6 +4,8 @@ import Loader from '../custom/Loader';
 import { FaStar } from "react-icons/fa";
 import { FaCartShopping } from "react-icons/fa6";
 import 'boxicons/css/boxicons.min.css';
+import { useForm } from 'react-hook-form';
+import { Bounce, toast } from 'react-toastify';
 
 
 
@@ -14,15 +16,58 @@ export default function ProductsDetailsArea({id}) {
   const [quantity,setQuantity] = useState(1);
   const [activeTab, setActiveTab] = useState("description");
 
+  const {register,handleSubmit,formState:{errors}} = useForm();
+
     const getProductDetails = async()=>{
-        try{const {data} = await axios.get(`https://ecommerce-node4.onrender.com/products/${id}`);
-        setProduct(data.product);
-        console.log(data.product.reviews);
+      setIsLoading(true);
+        try{
+          const {data} = await axios.get(`${import.meta.env.VITE_BURL}/products/${id}`);
+          setProduct(data.product);
+          console.log(data.product);
     }catch(error){
       console.log(error);
     }finally{
       setIsLoading(false);
     }
+    };
+
+    const reviewProduct = async (value)=>{
+      setIsLoading(true);
+      try{
+        const token = localStorage.getItem("userToken");
+        const response = await axios.post(`${import.meta.env.VITE_BURL}/products/${id}/review`,
+          value,
+        {
+          headers:{
+            Authorization:`Tariq__${token}`
+          }
+        }
+      );
+      toast.success(`review added successfully`,{
+        position:"top-right",
+        autoClose:4000,
+        hideProgressBar:false,
+        closeOnClick:true,
+        pauseOnHover:true,
+        draggable:true,
+        theme:"dark",
+        transition:Bounce,
+      });
+      getProductDetails();
+      }catch(error){
+        toast.error(`${error}`,{
+          position:"top-right",
+          autoClose:4000,
+          hideProgressBar:false,
+          closeOnClick:true,
+          pauseOnHover:true,
+          draggable:true,
+          theme:"dark",
+          transition:Bounce,
+        });
+      }finally{
+        setIsLoading(false);
+      }
     }
 
     useEffect(()=>{
@@ -317,8 +362,13 @@ export default function ProductsDetailsArea({id}) {
                   
                   {
                     product.reviews.map((element)=>(
+                      
                       <div className="review-item">
                         <div className="rating">
+                          <div>
+                            <img src={element.createdBy.image !=null ? element.createdBy.image.secure_url : ""} alt="" width={60} height={60} className='rounded-circle' />
+                            <h3>{element.createdBy.userName}</h3>
+                          </div>
                         {Array.from({ length: 5 }, (_, i) => (
                           <FaStar key={i} style={{ color: i < element.rating ? "#FFB607" : "#ccc" }} />
                         ))}
@@ -327,12 +377,6 @@ export default function ProductsDetailsArea({id}) {
                         <span>
                           <strong>Commented at </strong><strong>{element.createdAt.split("T")[0]}</strong>
                         </span>
-                        <p>
-                          Lorem ipsum dolor sit amet, consectetur adipiscing elit,
-                          sed do eiusmod tempor incididunt ut labore et dolore magna
-                          aliqua. Ut enim ad minim veniam, quis nostrud
-                          exercitation.
-                        </p>
                       </div>
 
                     ))}
@@ -341,57 +385,32 @@ export default function ProductsDetailsArea({id}) {
                 <div className="review-form">
                   <h3>Write a Review</h3>
 
-                  <form>
+                  <form onSubmit={handleSubmit(reviewProduct)}>
                     <div className="row gap-3">
                       <div className="col-lg-6 col-md-6">
                         <div className="form-group">
                           <input
                             type="text"
-                            id="name"
-                            name="name"
-                            placeholder="Enter your name"
+                            id="review-title"
+                            placeholder="Enter your review"
                             className="form-control"
+                            {...register('comment',{required:'comment is required !'})}
                           />
+                          {errors.comment? <div className='text-danger'>{errors.rating.message}</div>:null}
                         </div>
                       </div>
-
                       <div className="col-lg-6 col-md-6">
                         <div className="form-group">
                           <input
-                            type="email"
-                            id="email"
-                            name="email"
-                            placeholder="Enter your email"
-                            className="form-control"
-                          />
-                        </div>
-                      </div>
-
-                      <div className="col-lg-12 col-md-12">
-                        <div className="form-group">
-                          <input
-                            type="text"
-                            id="review-title"
-                            name="review-title"
-                            placeholder="Enter your review a title"
-                            className="form-control"
-                          />
-                        </div>
-                      </div>
-
-                      <div className="col-lg-12 col-md-12">
-                        <div className="form-group">
-                          <textarea
-                            name="review-body"
+                            type='text'
                             id="review-body"
-                            cols="30"
-                            rows="6"
-                            placeholder="Write your comments here"
+                            placeholder="Write your rating"
                             className="form-control"
-                          ></textarea>
+                            {...register('rating',{required:'rating is required !'})}
+                          />
+                          {errors.rating? <div className='text-danger'>{errors.rating.message}</div>:null}
                         </div>
                       </div>
-
                       <div className="col-lg-12 col-md-12">
                         <button type="submit" className="default-btn">
                           Submit Review

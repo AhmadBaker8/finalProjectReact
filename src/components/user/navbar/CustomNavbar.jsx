@@ -1,12 +1,16 @@
-import React from 'react'
+import React, { useContext, useEffect } from 'react'
 import { Container, Nav, Navbar, NavDropdown } from 'react-bootstrap'
 import { Link } from 'react-router-dom'
 import styles from './CustomNavbar.module.css'
 import logo from '../../../assets/images/logoLogin.svg'
 import { FaCartShopping } from "react-icons/fa6";
-import { FiAlignJustify } from "react-icons/fi";
+import { CartContext } from '../context/CartContext'
 
 export default function CustomNavbar() {
+
+  const {cartCount} = useContext(CartContext);
+
+
   return (
   <>
   <Navbar expand="lg" className={`bg-body-tertiary ${styles.firstNavbar}`}>
@@ -19,10 +23,12 @@ export default function CustomNavbar() {
         <Nav className="ms-auto d-flex gap-2">
           <Nav.Link as={Link} to={""} className='d-block'>
             <FaCartShopping />
+            <span>{cartCount}</span>
           </Nav.Link>
           <Nav.Link as={Link} to={"/auth/login"}>$
           <span>59</span>
           </Nav.Link>
+          <Nav.Link as={Link} to={"/profile"}>profile</Nav.Link>
           <Nav.Link as={Link} to={"/auth/login"}>Login</Nav.Link>
           <Nav.Link as={Link} to={"/auth/register"}>Register</Nav.Link>
         </Nav>

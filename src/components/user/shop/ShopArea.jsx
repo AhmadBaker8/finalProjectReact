@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { FaCartShopping } from "react-icons/fa6";
 import { FaRegHeart } from "react-icons/fa";
@@ -7,12 +7,14 @@ import { FaRegEye } from "react-icons/fa";
 import { FaStar } from "react-icons/fa";
 import Loader from "../custom/Loader";
 import { Slide, toast } from "react-toastify";
+import { CartContext } from "../context/CartContext";
 
 export default function ShopArea() {
   const [filterBy, setFilterBy] = useState("");
   const [categories, setCategories] = useState([]);
   const [products, setProducts] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const {cartCount,setCartCount} = useContext(CartContext);
 
   const getCategories = async () => {
     setIsLoading(true);
@@ -66,6 +68,7 @@ export default function ShopArea() {
           transition: Slide,
         });
       }
+      setCartCount(cartCount+1);
     } catch (error) {
       toast.info("Product already in the cart !", {
         position: "top-right",
