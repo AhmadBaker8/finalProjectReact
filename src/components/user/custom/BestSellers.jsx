@@ -1,22 +1,25 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { FaCartShopping } from "react-icons/fa6";
 import { FaRegHeart } from "react-icons/fa";
 import { FaRegEye } from "react-icons/fa";
 import { FaStar } from "react-icons/fa";
+import MyLoader from "./ModalLoader";
 import Loader from "./Loader";
 
 export default function BestSellers() {
   const [filterBy, setFilterBy] = useState("66fb864941aba231158e3b4d");
   const [categories, setCategories] = useState([]);
   const [products, setProducts] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
+  const [myLoader, setMyLoader] = useState(false);
 
   const getCategories = async () => {
+    setIsLoading(true);
     try {
       const { data } = await axios.get(
-        `https://ecommerce-node4.onrender.com/categories`
+        `${import.meta.env.VITE_BURL}/categories`
       );
       setCategories(data.categories);
     } catch (error) {
@@ -26,28 +29,41 @@ export default function BestSellers() {
   };
   const getProductsByCategories = async (id) => {
     setFilterBy(id);
+    setMyLoader(true);
     try {
       const { data } = await axios.get(
-        `https://ecommerce-node4.onrender.com/products/category/${id}`
+        `${import.meta.env.VITE_BURL}/products/category/${id}`
       );
       setProducts(data.products);
     } catch (error) {
     } finally {
-      setIsLoading(false);
+      setMyLoader(false);
     }
   };
+  
 
   useEffect(() => {
     getCategories();
     getProductsByCategories("66fb864941aba231158e3b4d");
   }, []);
 
+  const navigate = useNavigate();
+
+  const goToShop = ()=>{
+    navigate('/shop');
+  }
   if (isLoading) {
     return <Loader/>
   }
+
+  
+
+  
   return (
     <>
+      <MyLoader show={myLoader}/>
       <section className={"bestsellers-area ptb-100"}>
+      
         <div className="container">
           <div className="section-title">
             <h2>Best Sellers</h2>
@@ -70,7 +86,7 @@ export default function BestSellers() {
                 <div className="row">
                   {products.map((product) => {
                     return (
-                      <div className="col-lg-3 col-sm-6" key={product._id}>
+                      <div className="col-lg-3 col-sm-6" key={product._id} onClick={goToShop}>
                         <div className="single-shop-products">
                           <div className="shop-products-image">
                             <Link to={`/`}>

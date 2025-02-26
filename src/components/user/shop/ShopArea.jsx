@@ -8,19 +8,28 @@ import { FaStar } from "react-icons/fa";
 import Loader from "../custom/Loader";
 import { Slide, toast } from "react-toastify";
 import { CartContext } from "../context/CartContext";
+import ModalLoader from "../custom/ModalLoader";
+import { FaLongArrowAltRight } from "react-icons/fa";
+import { FaLongArrowAltLeft } from "react-icons/fa";
 
 export default function ShopArea() {
   const [filterBy, setFilterBy] = useState("");
   const [categories, setCategories] = useState([]);
   const [products, setProducts] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-  const {cartCount,setCartCount} = useContext(CartContext);
+  const [myLoader, setMyLoader] = useState(false);
+  const { cartCount, setCartCount } = useContext(CartContext);
+  const [sortBy, setSortBy] = useState("");
+  const [searchOn,setSearchOn] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const itemsPerPage = 6;
 
   const getCategories = async () => {
     setIsLoading(true);
     try {
       const { data } = await axios.get(
-        `https://ecommerce-node4.onrender.com/categories`
+        `${import.meta.env.VITE_BURL}/categories`
       );
       setCategories(data.categories);
     } catch (error) {
@@ -28,24 +37,29 @@ export default function ShopArea() {
       setIsLoading(false);
     }
   };
-  const getProductsByCategories = async (id) => {
-    setIsLoading(true);
+  const getProductsByCategories = async (id,page = 1) => {
+    setMyLoader(true);
     setFilterBy(id);
+    setCurrentPage(page);
     try {
       const { data } = await axios.get(
-        `https://ecommerce-node4.onrender.com/products/category/${id}`
+        `${import.meta.env.VITE_BURL}/products/category/${id}`
       );
       setProducts(data.products);
+      console.log(data.products.length);
+      setTotalPages(Math.ceil((data.products.length / itemsPerPage)));
     } catch (error) {
     } finally {
-      setIsLoading(false);
+      setMyLoader(false);
     }
   };
+
   const addToCart = async (id) => {
+    setMyLoader(true);
     try {
       const token = localStorage.getItem("userToken");
       const response = await axios.post(
-        "https://ecommerce-node4.onrender.com/cart",
+        `${import.meta.env.VITE_BURL}/cart`,
         {
           productId: id,
         },
@@ -68,7 +82,7 @@ export default function ShopArea() {
           transition: Slide,
         });
       }
-      setCartCount(cartCount+1);
+      setCartCount(cartCount + 1);
     } catch (error) {
       toast.info("Product already in the cart !", {
         position: "top-right",
@@ -81,6 +95,8 @@ export default function ShopArea() {
         theme: "dark",
         transition: Slide,
       });
+    } finally {
+      setMyLoader(false);
     }
   };
   const addToWishlist = (product) => {
@@ -103,10 +119,29 @@ export default function ShopArea() {
       theme: "dark",
     });
   };
+  const getAllProducts = async (sort = sortBy, page = currentPage,search = searchOn) => {
+    setMyLoader(true);
+    setCurrentPage(page);
+    setSortBy(sort);
+    setSearchOn(search);
+  
+    try {
+      const { data } = await axios.get(
+        `${import.meta.env.VITE_BURL}/products?page=${page}&limit=${itemsPerPage}&sort=${sort}&search=${search}`
+      );
+      setProducts(data.products);
+      setTotalPages(Math.ceil(data.total / itemsPerPage));
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setMyLoader(false);
+    }
+  };
+  
 
   useEffect(() => {
     getCategories();
-    getProductsByCategories("66fb864941aba231158e3b4d");
+    getAllProducts();
   }, []);
 
   if (isLoading) {
@@ -115,11 +150,31 @@ export default function ShopArea() {
 
   return (
     <>
+      <ModalLoader show={myLoader} />
       <section className="shop-area bg-ffffff pt-50 pb-50">
         <div className="container">
           <div className="row">
             <div className="col-lg-4 col-md-12">
               <aside className="widget-area">
+                <div className="widget widget_search">
+                  <form className="search-form" onSubmit={(e)=>{
+                    e.preventDefault();
+                    getAllProducts(sortBy,1,searchOn);
+                  }}>
+                    <label>
+                      <span className="screen-reader-text">Search for:</span>
+                      <input
+                        type="search"
+                        className="search-field"
+                        placeholder="Search..."
+                        onChange={(e)=>setSearchOn(e.target.value)}
+                      />
+                    </label>
+                    <button type="submit">
+                      <i className="bx bx-search-alt"></i>
+                    </button>
+                  </form>
+                </div>
                 <div className="widget widget_categories">
                   <h3 className="widget-title">Categories</h3>
                   <ul className="categories">
@@ -138,7 +193,18 @@ export default function ShopArea() {
               </aside>
             </div>
 
-            <div className="col-lg-8 col-md-12">
+            <div className="col-lg-8 col-md-12 d-flex flex-column gap-3">
+              <div className="col-lg-4 col-md-4 align-self-end">
+                <div className="products-ordering-list">
+                  <select className="form-control" onChange={(e)=>getAllProducts(e.target.value,1,searchOn)}>
+                    <option value={""}>Default sorting</option>
+                    <option value={"finalPrice"}>Sort by price: low to high</option>
+                    <option value={"-finalPrice"}>Sort by price: high to low</option>
+                    <option value={"name"}>Sort by name</option>
+                    <option value={"rating"}>Sort by average rating</option>
+                  </select>
+                </div>
+              </div>
               <div className="row">
                 {products.map((product) => {
                   return (
@@ -201,7 +267,7 @@ export default function ShopArea() {
                               <FaStar style={{ color: "#FFB607" }} />
                             </li>
                           </ul>
-                          <span>$150.00</span>
+                          <span>${product.finalPrice}</span>
                         </div>
                       </div>
                     </div>
@@ -210,23 +276,18 @@ export default function ShopArea() {
               </div>
               <div className="col-lg-12 col-md-12">
                 <div className="pagination-area">
-                  <a href="#" className="prev page-numbers">
-                    <i className="flaticon-left-arrow"></i>
+                  <a className={`next page-numbers ${currentPage === 1 ? "disabled-button" : ""}`}
+                  onClick={()=>getAllProducts(sortBy,currentPage-1,searchOn)}
+                  >
+                    <FaLongArrowAltLeft />
                   </a>
-                  <a href="#" className="page-numbers">
-                    1
-                  </a>
-                  <span className="page-numbers current" aria-current="page">
-                    2
-                  </span>
-                  <a href="#" className="page-numbers">
-                    3
-                  </a>
-                  <a href="#" className="page-numbers">
-                    4
-                  </a>
-                  <a href="#" className="next page-numbers">
-                    <i className="flaticon-right-arrow"></i>
+                  
+                  <span className="page-numbers current"> Page {currentPage} of {totalPages} </span>
+                  
+                  <a className={`next page-numbers ${currentPage >= totalPages ? "disabled-button" : ""}`}
+                  onClick={()=>getAllProducts(sortBy,currentPage+1,searchOn)}
+                  >
+                    <FaLongArrowAltRight />
                   </a>
                 </div>
               </div>

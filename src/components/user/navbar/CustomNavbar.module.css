@@ -19,6 +19,10 @@
 
 .secondNavbar{
     background-color: #222F3F !important;
+    width: 100% ;
+    position: sticky;
+    top: 0;
+    z-index: 100;
 }
 .secondNavbar a{
     color: #fff;

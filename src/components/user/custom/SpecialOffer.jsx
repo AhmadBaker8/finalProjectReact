@@ -1,19 +1,20 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react'
 import { FaStar } from "react-icons/fa";
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import Loader from './Loader';
 
 
 export default function SpecialOffer() {
 
     const [products,setProducts] = useState([]);
-    const [isLoading,setIsLoading] = useState(true);
+    const [isLoading,setIsLoading] = useState(false);
 
 
     const getProducts = async ()=>{
+      setIsLoading(true);
         try{
-            const {data} = await axios.get(`https://ecommerce-node4.onrender.com/products?page=1&limit=3`);
+            const {data} = await axios.get(`${import.meta.env.VITE_BURL}/products?page=1&limit=3`);
             setProducts(data.products);
         }catch(error){
             console.log(error);
@@ -25,7 +26,11 @@ export default function SpecialOffer() {
 
     useEffect(()=>{
         getProducts();
-    },[])
+    },[]);
+    const navigate = useNavigate();
+    const goToShop = ()=>{
+      navigate('/shop');
+    }
 
 
     if(isLoading){
@@ -43,7 +48,7 @@ export default function SpecialOffer() {
         <div className="row justify-content-center">
         {
                 products.map(product=>
-          <div className="col-lg-4 col-md-12">
+          <div className="col-lg-4 col-md-12" onClick={goToShop}>
             
               <div className="single-offer-products">
                 <div className="offer-products-image">
@@ -75,42 +80,6 @@ export default function SpecialOffer() {
                   </ul>
 
                   
-                </div>
-
-                <div className="offer-soon-content">
-                  <div
-                    id="timer"
-                    className="flex-wrap d-flex justify-content-center"
-                  >
-                    <div
-                      id="days"
-                      className="align-items-center flex-column d-flex justify-content-center"
-                    >
-                      
-                      <span>Days</span>
-                    </div>
-                    <div
-                      id="hours"
-                      className="align-items-center flex-column d-flex justify-content-center"
-                    >
-                      
-                      <span>Hours</span>
-                    </div>
-                    <div
-                      id="minutes"
-                      className="align-items-center flex-column d-flex justify-content-center"
-                    >
-                      
-                      <span>Minutes</span>
-                    </div>
-                    <div
-                      id="seconds"
-                      className="align-items-center flex-column d-flex justify-content-center"
-                    >
-                      
-                      <span>Seconds</span>
-                    </div>
-                  </div>
                 </div>
               </div>
             

@@ -27,7 +27,7 @@ export default function CheckoutArea() {
         }
       }
     );
-    if(response.status == 200){
+    if(response.status == 201){
       toast.success(`The order has been created`,{
         position:"top-right",
         autoClose:4000,
@@ -39,12 +39,11 @@ export default function CheckoutArea() {
         transition:Bounce,
       });
     }
-    console.log(response.data.order);
     setOrder(response.data.order);
     setCartCount(0);
 
     }catch(error){
-      toast.error(`${error}`,{
+      toast.error(`${error.message}`,{
         position:"top-right",
         autoClose:4000,
         hideProgressBar:false,
@@ -170,43 +169,6 @@ export default function CheckoutArea() {
                     </div>
                   </div>
                 </div>
-
-                <div className="billing-details py-5">
-                  <h3 className="title">Billing Details</h3>
-                  <div className="row">
-                    <div className="col-lg-12 col-md-12">
-                      <div className="form-check">
-                        <input
-                          type="checkbox"
-                          className="form-check-input mt-1 h-5 w-5"
-                          id=""
-                        />
-                        <label
-                          className="form-check-label ml-2"
-                          htmlFor="create-an-account"
-                        >
-                          Same as Shipping Details
-                        </label>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                {
-                  <div className="flex justify-start">
-                    <div className="w-50">
-                      <input
-                        type="text"
-                        className="form-control"
-                        placeholder="PayPal Email*"
-                      />
-                    </div>
-                    <img
-                      className="w-20 bg-white ml-2 p-2  rounded-lg"
-                      src="https://upload.wikimedia.org/wikipedia/commons/b/b5/PayPal.svg"
-                    />
-                  </div>
-                }
               </div>
 
               <div className="col-lg-4 col-md-12">
@@ -269,10 +231,6 @@ export default function CheckoutArea() {
               </div>
             </div>
           </form>
-          <div>
-            {
-            }
-          </div>
         </div>
       </section>
     </>

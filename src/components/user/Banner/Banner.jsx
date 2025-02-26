@@ -3,11 +3,15 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/navigation";
 import { Navigation, Autoplay } from "swiper/modules";
-import {Link} from 'react-router-dom';
 import headphone from "../../../assets/images/banner/headphone1.png";
 import clothes from "../../../assets/images/banner/clothes1.svg";
 import landing from "../../../assets/images/banner/landing.jpg";
 import CustomButton from '../custom/CustomButton';
+import './Banner.css'
+import { FaLongArrowAltRight } from "react-icons/fa";
+import { FaLongArrowAltLeft } from "react-icons/fa";
+
+
 
 export default function Banner() {
   return (
@@ -32,9 +36,9 @@ export default function Banner() {
                     <div className="main-slider-content">
                       <b style={{ fontWeight: "bold" }}>Big Sale Offer</b>
                       <h1>Always our <br /> top brands!</h1>
-                      <h6>
+                      <p>
                         Clothes, accessories, technology, and more!
-                      </h6>
+                      </p>
                       <CustomButton/>
                     </div>
                   </div>
@@ -116,9 +120,11 @@ export default function Banner() {
           </div>
         </div>
       </SwiperSlide>
+      
+      <FaLongArrowAltLeft className='swiper-button-prev' />
+      <FaLongArrowAltRight className='swiper-button-next'/>  
     </Swiper>
-    <div className="swiper-button-prev"></div>
-    <div className="swiper-button-next"></div>  
+
     </>
   )
 }

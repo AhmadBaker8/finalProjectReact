@@ -7210,19 +7210,21 @@ blockquote p,
   visibility: visible;
 }
 .pagination-area .page-numbers {
-  width: 35px;
+  width: 55px;
   height: 35px;
   margin: 0 3px;
   display: inline-block;
   background-color: #fff;
   line-height: 35px;
   color: #292929;
-  -webkit-box-shadow: 0 2px 10px 0 #d8dde6;
   box-shadow: 0 2px 10px 0 #d8dde6;
   font-size: 14px;
   font-weight: 700;
   border-radius: 50px;
   text-align: center;
+}
+.pagination-area .page-numbers:nth-child(2){
+  width: 120px;
 }
 .pagination-area .page-numbers.current,
 .pagination-area .page-numbers:hover,
@@ -7231,6 +7233,12 @@ blockquote p,
   color: #fff;
   -webkit-box-shadow: 0 2px 10px 0 #d8dde6;
   box-shadow: 0 2px 10px 0 #d8dde6;
+}
+
+.disabled-button {
+  opacity: 0.5; 
+  cursor: not-allowed;
+  pointer-events: none;
 }
 .single-footer-widget {
   margin-bottom: 30px;
@@ -8494,19 +8502,69 @@ blockquote p,
 }
 
 
-.swiper-button-prev,
-.swiper-button-next {
-  color: #000;
+.main-slider .swiper-button-prev,
+.main-slider .swiper-button-next {
+  visibility: hidden;
   position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  z-index: 10;
-}
-
-.swiper-button-prev {
   left: 10px;
+  top: 50%;
+  -webkit-transition: 0.5s;
+  transition: 0.5s;
+  margin: 0;
+  padding: 10px;
+  outline: 0;
+  width: 45px;
+  height: 45px;
+  line-height: 52px;
+  background-color: #222F3F !important;
+  border: 1px solid #222F3F !important;
+  color: #ffffff !important;
+  border-radius: 50% !important;
 }
 
-.swiper-button-next {
+.main-slider .swiper-button-next {
+  left: auto;
   right: 10px;
+  color: #fff
+}
+
+.main-slider:hover .swiper-button-prev {
+  visibility: visible;
+          transform: translateX(50%);
+          color: #fff
+}
+
+.modal-transparent .modal-content {
+  background: transparent !important;
+  border: none;
+  box-shadow: none;
+}
+
+.myLoader-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: fixed;
+  width: 100%;
+  height: 100vh;
+  background-color: rgba(0, 0, 0,0.5) !important;
+  z-index: 1050;
+}
+
+.myLoader {
+  width: 50px;
+  height: 50px;
+  border: 5px solid gold;
+  border-bottom-color: transparent;
+  border-radius: 50%;
+  animation: rotation 1s linear infinite;
+}
+
+@keyframes rotation {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
