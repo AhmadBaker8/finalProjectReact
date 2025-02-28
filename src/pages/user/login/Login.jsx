@@ -1,6 +1,5 @@
 import axios from "axios";
 import React, { useState } from "react";
-import { Button, FloatingLabel, Form } from "react-bootstrap";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 import { Bounce, Slide, toast } from "react-toastify";
@@ -27,7 +26,7 @@ export default function Login() {
     setIsLoading(true);
     try {
       const response = await axios.post(
-        `https://ecommerce-node4.onrender.com/auth/signin`,
+        `${import.meta.env.VITE_BURL}/auth/signin`,
         value
       );
       if (response.status == 200) {
@@ -65,7 +64,7 @@ export default function Login() {
             <p>Access to your store with a single click</p>
           </div>
         </div>
-        <div className={`col-md-6 d-flex flex-column justify-content-center gap-5 ${styles.formDiv}`}>
+        <div className={`col-md-6 d-flex flex-column align-items-center justify-content-center gap-5 ${styles.formDiv}`}>
           <div className="logo d-flex justify-content-center">
             <img src={logoLogin} alt="" />
           </div>

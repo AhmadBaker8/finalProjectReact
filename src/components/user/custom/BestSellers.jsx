@@ -71,7 +71,7 @@ export default function BestSellers() {
           <div className="tab bestsellers-list-tab">
             <ul className="tabs">
               {categories.map((category) => (
-                <li
+                <li key={category._id}
                   onClick={() => getProductsByCategories(category._id)}
                   className={`tab-item${
                     filterBy === `${category._id}` ? " tab-active" : ""

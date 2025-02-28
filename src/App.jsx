@@ -5,7 +5,7 @@ import './App.css'
 import CustomNavbar from './components/user/navbar/CustomNavbar'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import AuthLayout from './layouts/AuthLayout'
-import Register from './pages/user/register/Register'
+import Register from './pages/user/login/Register'
 import Login from './pages/user/login/Login'
 import DashboardLayout from './layouts/DashboardLayout'
 import { ToastContainer } from 'react-toastify'
@@ -43,7 +43,12 @@ function App() {
     },
     {
       path:"/",
-      element:<UserLayout/>,
+      element:
+      <UserContextProvider>
+      <CartContextProvider>
+      <UserLayout/>
+      </CartContextProvider>
+      </UserContextProvider>,
       children:[
         {
           path:"/",
@@ -96,12 +101,8 @@ function App() {
   return (
     <>
 
-      <UserContextProvider>
-      <CartContextProvider>
       <ToastContainer />
       <RouterProvider router={router}/>
-      </CartContextProvider>
-      </UserContextProvider>
       
     </>
   )

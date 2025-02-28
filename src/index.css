@@ -6396,6 +6396,18 @@ h6:last-child {
   .products-review-form
   .review-comments
   .review-item
+  img {
+
+    width: 100px;
+    height: 100px;
+  
+}
+.products-details-tabs
+  .tab-content
+  .tab-pane
+  .products-review-form
+  .review-comments
+  .review-item
   .rating
   .bx.bxs-star {
   color: #ffba0a;
@@ -8568,3 +8580,98 @@ blockquote p,
     transform: rotate(360deg);
   }
 }
+
+
+
+
+
+
+
+
+.navbar-custom {
+  background-color: #131921 ; 
+  padding: 20px 0;
+}
+
+.logo {
+  width: 120px;
+  height: auto;
+}
+
+.cart-link {
+  position: relative;
+  color: #ffffff;
+  font-size: 1.2rem;
+  transition: 0.3s;
+}
+
+.cart-link:hover {
+  color: #f8b400; 
+}
+
+.cart-count {
+  position: absolute;
+  top: -5px;
+  right: -8px;
+  background-color: #dc3545;
+  color: white;
+  font-size: 12px;
+  font-weight: bold;
+  padding: 2px 6px;
+  border-radius: 50%;
+}
+
+.auth-links {
+  display: flex;
+  align-items: center;
+  color: white;
+}
+
+.auth-links a {
+  color: white;
+  text-decoration: none;
+  font-size: 1rem;
+  font-weight: bold;
+  transition: 0.3s;
+}
+
+.auth-links a:hover {
+  color: #f8b400;
+}
+
+.separator {
+  margin: 0 10px;
+  color: white;
+}
+
+.profile-link {
+  color: white;
+  font-size: 1rem;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.profile-link:hover {
+  color: #f8b400;
+}
+
+.logout-btn {
+  background: #dc3545;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  font-size: 1rem;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: 0.3s;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.logout-btn:hover {
+  background: #b52a37;
+}
+

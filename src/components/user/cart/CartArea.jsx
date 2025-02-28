@@ -11,16 +11,19 @@ export default function CartArea() {
   const [isLoading, setIsLoading] = useState(false);
   const [myLoader, setMyLoader] = useState(false);
   const { cartCount, setCartCount } = useContext(CartContext);
+  const token = localStorage.getItem("userToken");
+
   const getCart = async () => {
     setIsLoading(true);
     try {
-      const token = localStorage.getItem("userToken");
+      if(token){
       const response = await axios.get(`${import.meta.env.VITE_BURL}/cart`, {
         headers: {
           Authorization: `Tariq__${token}`,
         },
       });
       setCart(response.data.products);
+    }
     } catch (error) {
       console.log(error);
     } finally {

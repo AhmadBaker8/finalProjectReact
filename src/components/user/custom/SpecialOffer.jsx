@@ -48,7 +48,7 @@ export default function SpecialOffer() {
         <div className="row justify-content-center">
         {
                 products.map(product=>
-          <div className="col-lg-4 col-md-12" onClick={goToShop}>
+          <div className="col-lg-4 col-md-12" key={product._id} onClick={goToShop}>
             
               <div className="single-offer-products">
                 <div className="offer-products-image">

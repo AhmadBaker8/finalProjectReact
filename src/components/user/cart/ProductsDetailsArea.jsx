@@ -1,34 +1,95 @@
 import axios from 'axios'
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import Loader from '../custom/Loader';
 import { FaStar } from "react-icons/fa";
 import { FaCartShopping } from "react-icons/fa6";
 import 'boxicons/css/boxicons.min.css';
 import { useForm } from 'react-hook-form';
-import { Bounce, toast } from 'react-toastify';
+import { Bounce, Slide, toast } from 'react-toastify';
+import ModalLoader from '../custom/ModalLoader';
+import { CartContext } from '../context/CartContext';
+import Swal from 'sweetalert2';
 
 
 
 export default function ProductsDetailsArea({id}) {
 
   const [isLoading,setIsLoading] = useState(true);
+  const [myLoader,setMyLoader] = useState(true);
+
+
   const [product,setProduct] = useState([]);
   const [quantity,setQuantity] = useState(1);
   const [activeTab, setActiveTab] = useState("description");
-
   const {register,handleSubmit,formState:{errors}} = useForm();
+  const { cartCount, setCartCount } = useContext(CartContext);
 
     const getProductDetails = async()=>{
       setIsLoading(true);
         try{
           const {data} = await axios.get(`${import.meta.env.VITE_BURL}/products/${id}`);
           setProduct(data.product);
-          console.log(data.product);
     }catch(error){
       console.log(error);
     }finally{
       setIsLoading(false);
     }
+    };
+    const addToCart = async () => {
+      const token = localStorage.getItem("userToken");
+      setMyLoader(true);
+      try {
+        const response = await axios.post(
+          `${import.meta.env.VITE_BURL}/cart`,
+          {
+            productId: id,
+          },
+          {
+            headers: {
+              Authorization: `Tariq__${token}`,
+            },
+          }
+        );
+        if (response.status == 201) {
+          toast.success("Product added successfully...", {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: false,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "dark",
+            transition: Slide,
+          });
+        }
+        setCartCount(cartCount + 1);
+      } catch (error) {
+        if(token){
+          toast.info("Product already in the cart !", {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: false,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "dark",
+            transition: Slide,
+          });
+        }
+        else{
+          Swal.fire({
+            icon: "warning",
+            title: "You are not logged in!",
+            text: "Please log in to add items to your cart.",
+            confirmButtonText: "OK",
+          });
+          return;
+        }
+      } finally {
+        setMyLoader(false);
+      }
     };
 
     const reviewProduct = async (value)=>{
@@ -97,17 +158,37 @@ export default function ProductsDetailsArea({id}) {
                 <h3>{product.name}</h3>
 
                 <div className="product-review">
-                  <div className="rating">
-                    <FaStar style={{ color: "#FFB607" }} />
-                    <FaStar style={{ color: "#FFB607" }} />
-                    <FaStar style={{ color: "#FFB607" }} />
-                    <FaStar style={{ color: "#FFB607" }} />
-                    <FaStar style={{ color: "#FFB607" }} />
-                  </div>
+                            <div className="rating">
+                              {product.reviews.length > 0 ? (
+                                (() => {
+                                  const avgRating =
+                                    product.reviews.reduce(
+                                      (sum, review) => sum + review.rating,
+                                      0
+                                    ) / product.reviews.length;
+
+                                  return Array.from({ length: 5 }, (_, i) => (
+                                    <FaStar
+                                      key={i}
+                                      style={{
+                                        color:
+                                          i < Math.round(avgRating)
+                                            ? "#FFB607"
+                                            : "#ccc",
+                                      }}
+                                    />
+                                  ));
+                                })()
+                              ) : (
+                                <span>No Reviews</span>
+                              )}
+                            </div>
                 </div>
 
                 <div className="price">
-                  <span className="old-price">${product.price}</span>
+                  {
+                    product.discount != 0 ? <span className="old-price">${product.price}</span> : ""
+                  }
                   <span className="new-price">${product.finalPrice}</span>
                 </div>
                 <p>{product.description}</p>
@@ -165,9 +246,8 @@ export default function ProductsDetailsArea({id}) {
 
                 <div className="product-add-to-cart">
                   <button
-                    type="submit"
                     className="default-btn"
-                    
+                    onClick={addToCart}
                   >
                     <FaCartShopping/>
                     Add to cart
@@ -363,10 +443,10 @@ export default function ProductsDetailsArea({id}) {
                   {
                     product.reviews.map((element)=>(
                       
-                      <div className="review-item">
+                      <div className="review-item" key={element._id}>
                         <div className="rating">
                           <div>
-                            <img src={element.createdBy.image !=null ? element.createdBy.image.secure_url : ""} alt="" width={60} height={60} className='rounded-circle' />
+                            <img src={element.createdBy.image !=null ? element.createdBy.image.secure_url : ""} alt="" className='rounded-circle' />
                             <h3>{element.createdBy.userName}</h3>
                           </div>
                         {Array.from({ length: 5 }, (_, i) => (

@@ -16,7 +16,9 @@ const UserContextProvider = ({children})=>{
     const getUser = async() =>{
         setIsLoading(true);
         const token = localStorage.getItem('userToken');
+        
         try{
+            if(token){
             const response = await axios.get(`${import.meta.env.VITE_BURL}/user/profile`,
                 {
                     headers:{
@@ -25,6 +27,7 @@ const UserContextProvider = ({children})=>{
                 }
             );
             setUser(response.data.user);
+        }
         }catch(error){
             console.log(error);
         }finally{
@@ -35,7 +38,7 @@ const UserContextProvider = ({children})=>{
     if(isLoading){
         return <Loader/>
     }
-    return <UserContext.Provider value={{user}}>
+    return <UserContext.Provider value={{user,setUser}}>
         {children}
     </UserContext.Provider>
 

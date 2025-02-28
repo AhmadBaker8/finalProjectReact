@@ -22,7 +22,7 @@ export default function Register() {
     const registerUser = async(value) =>{
       setIsLoading(true);
       try{
-        const response = await axios.post(`https://ecommerce-node4.onrender.com/auth/signup`,value);
+        const response = await axios.post(`${import.meta.env.VITE_BURL}/auth/signup`,value);
         if(response.status==201){
           toast.info('Please check your email.', {
             position: "top-right",
@@ -66,7 +66,7 @@ export default function Register() {
             <p>Access to your store with a single click</p>
           </div>
         </div>
-        <div className={`col-md-6 d-flex flex-column justify-content-center gap-5 ${styles.formDiv}`}>
+        <div className={`col-md-6 d-flex flex-column align-items-center justify-content-center gap-5 ${styles.formDiv}`}>
           <div className="logo d-flex justify-content-center">
             <img src={logoLogin} alt="" />
           </div>

@@ -1,5 +1,6 @@
 import axios from "axios";
 import { createContext, useEffect, useState } from "react";
+import Loader from "../custom/Loader";
 
 
 export const CartContext = createContext();
@@ -9,11 +10,13 @@ export const CartContext = createContext();
 const CartContextProvider = ({children})=>{
 
     const [cartCount,setCartCount] = useState(0);
-    const [cartQty, setCartQty] = useState(1);
+    const [isLoading,setIsLoading] = useState(false);
 
     const getCartCount = async () => {
+      const token = localStorage.getItem("userToken");
+      setIsLoading(true);
       try {
-        const token = localStorage.getItem("userToken");
+        if(token){
         const response = await axios.get(
           `${import.meta.env.VITE_BURL}/cart`,
           {
@@ -22,9 +25,13 @@ const CartContextProvider = ({children})=>{
             },
           }
         );
+      
         setCartCount(response.data.count);
+      }
       } catch (error) {
         console.log(error);
+      }finally{
+        setIsLoading(false);
       }
     };
     
@@ -32,6 +39,10 @@ const CartContextProvider = ({children})=>{
     useEffect(()=>{
       getCartCount();
     },[])
+
+    if(isLoading){
+      return <Loader/>
+    }
 
     return <CartContext.Provider value={{cartCount,setCartCount}}>
         {children}
