@@ -49,8 +49,8 @@ export default function BestSellers() {
 
   const navigate = useNavigate();
 
-  const goToShop = ()=>{
-    navigate('/shop');
+  const goToProductDetails = (id)=>{
+    navigate(`/products-details/${id}`)
   }
   if (isLoading) {
     return <Loader/>
@@ -86,7 +86,7 @@ export default function BestSellers() {
                 <div className="row">
                   {products.map((product) => {
                     return (
-                      <div className="col-lg-3 col-sm-6" key={product._id} onClick={goToShop}>
+                      <div className="col-lg-3 col-sm-6" key={product._id} onClick={()=>goToProductDetails(product._id)}>
                         <div className="single-shop-products">
                           <div className="shop-products-image">
                             <Link to={`/`}>

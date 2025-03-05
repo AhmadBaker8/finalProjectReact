@@ -317,7 +317,6 @@ export default function CartArea() {
                       }}
                     >
                       Proceed to Checkout
-                      <span></span>
                     </Link>
                   }
                 </button>

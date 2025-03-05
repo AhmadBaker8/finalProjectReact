@@ -8,15 +8,29 @@ import styles from '../login/Login.module.css'
 import loginPicture from "../../../assets/images/loginPicture.jpg";
 import logoLogin from "../../../assets/images/logoLogin.svg";
 import arrowLeft from "../../../assets/images/arrow-left.png";
+import Swal from 'sweetalert2';
 
 
 export default function Register() {
+
+  const handleRegisterSuccess = () => {
+    Swal.fire({
+      title: "Registration Successful!",
+      text: "Please check your email to activate your account.",
+      icon: "success",
+      confirmButtonText: "Go to Email",
+      confirmButtonColor: "#3085d6",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        window.open(`https://mail.google.com/mail/u/0/#inbox`, "_blank");
+      }
+    });
+  };
 
     const goToHome = () =>{
       navigate("/");
     };
     const [isLoading,setIsLoading] = useState(false);
-    const [serverError,setServerError] = useState(null);
     const {register,handleSubmit,formState:{errors}} = useForm();
     const navigate = useNavigate();
     const registerUser = async(value) =>{
@@ -24,17 +38,7 @@ export default function Register() {
       try{
         const response = await axios.post(`${import.meta.env.VITE_BURL}/auth/signup`,value);
         if(response.status==201){
-          toast.info('Please check your email.', {
-            position: "top-right",
-            autoClose: 4000,
-            hideProgressBar: false,
-            closeOnClick: false,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: "dark",
-            transition: Bounce,
-          });
+          handleRegisterSuccess();
           navigate('/login');
         }
       }

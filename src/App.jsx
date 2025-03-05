@@ -1,8 +1,5 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
+
 import './App.css'
-import CustomNavbar from './components/user/navbar/CustomNavbar'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import AuthLayout from './layouts/AuthLayout'
 import Register from './pages/user/login/Register'
@@ -22,6 +19,8 @@ import Wishlist from './pages/user/wishlist/Wishlist'
 import CartContextProvider from './components/user/context/CartContext'
 import Profile from './pages/profile/Profile'
 import UserContextProvider from './components/user/context/UserContext'
+import GoToTop from './components/user/custom/GoToTop'
+import ScrollToTop from './components/user/custom/ScrollToTop'
 
 
 function App() {
@@ -47,6 +46,7 @@ function App() {
       <UserContextProvider>
       <CartContextProvider>
       <UserLayout/>
+      <ScrollToTop/>
       </CartContextProvider>
       </UserContextProvider>,
       children:[
@@ -100,9 +100,10 @@ function App() {
 
   return (
     <>
-
+      
       <ToastContainer />
       <RouterProvider router={router}/>
+      <GoToTop/>
       
     </>
   )

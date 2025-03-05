@@ -4,7 +4,7 @@ import { ThreeDots } from "react-loader-spinner";
 export default function Loader() {
   return (
     <>
-      <div className="preloader">
+      <div className="preloader ">
         <div className="loader">
           <ThreeDots
             visible={true}

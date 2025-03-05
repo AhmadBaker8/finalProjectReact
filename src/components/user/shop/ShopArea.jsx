@@ -57,7 +57,6 @@ export default function ShopArea() {
     const token = localStorage.getItem("userToken");
     setMyLoader(true);
     try {
-      
       const response = await axios.post(
         `${import.meta.env.VITE_BURL}/cart`,
         {
