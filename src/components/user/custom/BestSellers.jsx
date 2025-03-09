@@ -120,23 +120,31 @@ export default function BestSellers() {
                             <h3>
                               <Link to={`/`}>{product.name}</Link>
                             </h3>
-                            <ul className="rating">
-                              <li>
-                                <FaStar style={{ color: "#FFB607" }} />
-                              </li>
-                              <li>
-                                <FaStar style={{ color: "#FFB607" }} />
-                              </li>
-                              <li>
-                                <FaStar style={{ color: "#FFB607" }} />
-                              </li>
-                              <li>
-                                <FaStar style={{ color: "#FFB607" }} />
-                              </li>
-                              <li>
-                                <FaStar style={{ color: "#FFB607" }} />
-                              </li>
-                            </ul>
+                            <div className="rating">
+                                                   {product.reviews.length > 0 ? (
+                                                     (() => {
+                                                       const avgRating =
+                                                         product.reviews.reduce(
+                                                           (sum, review) => sum + review.rating,
+                                                           0
+                                                         ) / product.reviews.length;
+                           
+                                                       return Array.from({ length: 5 }, (_, i) => (
+                                                         <FaStar
+                                                           key={i}
+                                                           style={{
+                                                             color:
+                                                               i < Math.round(avgRating)
+                                                                 ? "#FFB607"
+                                                                 : "#ccc",
+                                                           }}
+                                                         />
+                                                       ));
+                                                     })()
+                                                   ) : (
+                                                     <span>No Reviews</span>
+                                                   )}
+                                                 </div>
                             <span>$150.00</span>
                           </div>
                         </div>
